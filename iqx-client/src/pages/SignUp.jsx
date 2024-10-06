@@ -28,7 +28,7 @@ export default function SignUp() {
   } = useForm({ resolver: zodResolver(schema) });
 
   return (
-    <div className="relative flex h-screen w-screen items-center justify-center">
+    <div className="relative flex h-screen w-screen items-center justify-center bg-[linear-gradient(180deg,_#2118A0_0%,_#1B0419_100%)]">
       <p className="absolute left-[5%] top-4 text-4xl font-semibold tracking-widest text-white">
         IQX
       </p>

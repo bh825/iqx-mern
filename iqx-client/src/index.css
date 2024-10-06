@@ -61,6 +61,6 @@
     @apply border-border;
   }
   body {
-    @apply bg-[linear-gradient(180deg,_#2118A0_0%,_#1B0419_100%)] text-foreground;
+    @apply text-foreground;
   }
 }

@@ -4,8 +4,9 @@ import { Route, Routes } from "react-router-dom";
 import SignIn from "./pages/SignIn";
 import PrivateRoute from "./pages/PrivateRoute";
 import SignUp from "./pages/SignUp";
-import Main from "./pages/Main";
 import Dashboard from "./pages/Dashboard";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function routes() {
   return (
@@ -27,11 +28,10 @@ export default function routes() {
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/sign-up" element={<SignUp />} />
         <Route element={<PrivateRoute />}>
-          <Route element={<Main />}>
-            <Route path="/" element={<Dashboard />} />
-          </Route>
+          <Route path="/" element={<Dashboard />} />
         </Route>
       </Routes>
+      <ToastContainer position="top-right" autoClose={5000} theme="dark" />
     </SWRConfig>
   );
 }

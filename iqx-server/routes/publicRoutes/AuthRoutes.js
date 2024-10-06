@@ -16,7 +16,7 @@ AuthRoutes.route("/login").post((req, res, next) => {
       if (await data.isPasswordValid(req.body.password)) {
         return res.send({
           status: true,
-          message: "login successfully",
+          message: "You are loggged in. Now, You access all your projects.",
           tk: data?.createJwt()
         });
       } else {
