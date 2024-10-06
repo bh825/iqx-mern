@@ -1,4 +1,3 @@
-const moment = require("moment");
 const users = require("../../models/users");
 
 const AuthRoutes = require("express").Router();
@@ -14,15 +13,11 @@ AuthRoutes.route("/login").post((req, res, next) => {
           message: req?.body?.email ? "User is not available" : "Please, enter email!"
         });
       }
-      if (
-        (await data.isPasswordValid(req.body.password)) &&
-        (data?.resignation_date ? moment().isSameOrBefore(data?.resignation_date) : true)
-      ) {
+      if (await data.isPasswordValid(req.body.password)) {
         return res.send({
           status: true,
           message: "login successfully",
-          tk: data?.createJwt(),
-          data: data
+          tk: data?.createJwt()
         });
       } else {
         next({

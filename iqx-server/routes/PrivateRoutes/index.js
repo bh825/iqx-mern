@@ -1,6 +1,7 @@
 const PrivateRoutes = require("express").Router();
 const jwt = require("jsonwebtoken");
 const users = require("../../models/users");
+const CommonRoutes = require("./commonRoutes");
 
 PrivateRoutes.use((req, res, next) => {
   jwt.verify(req?.headers?.authorization?.split(" ")[1], process.env.JWT_SECRET, function (err, decoded) {
@@ -24,5 +25,7 @@ PrivateRoutes.use((req, res, next) => {
     }
   });
 });
+
+PrivateRoutes.use(CommonRoutes);
 
 module.exports = PrivateRoutes;

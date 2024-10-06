@@ -4,8 +4,8 @@ const jwt = require("jsonwebtoken");
 
 const schema = new mongoose.Schema(
   {
-    first_name: { type: String, required: [true, "{PATH} is required"] },
-    last_name: { type: String, required: [true, "{PATH} is required"] },
+    first_name: { type: String },
+    last_name: { type: String },
     email: {
       type: String,
       required: [true, "{PATH} is required"],
