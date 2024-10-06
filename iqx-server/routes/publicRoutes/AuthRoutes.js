@@ -10,7 +10,7 @@ AuthRoutes.route("/login").post((req, res, next) => {
         return next({
           status: 403,
           name: "user error",
-          message: req?.body?.email ? "User is not available" : "Please, enter email!"
+          message: req?.body?.email ? "You are not signed up with us. Please, Sign up." : "Please, enter email!"
         });
       }
       if (await data.isPasswordValid(req.body.password)) {

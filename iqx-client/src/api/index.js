@@ -23,12 +23,10 @@ Api.interceptors.request.use((req) => {
 
 Api.interceptors.response.use(
   (response) => {
-    if (response.data.status) {
-      return response.data;
-    } else {
-      toast.error(response.data.message);
-      return response.data;
+    if (response.config.method !== "GET") {
+      toast.success(response.data.message);
     }
+    return response.data;
   },
   (err) => {
     if (err?.request?.responseURL?.includes("users/data")) {

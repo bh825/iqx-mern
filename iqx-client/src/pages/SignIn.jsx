@@ -5,7 +5,6 @@ import { useUserStore } from "@/store/user";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
 import { z } from "zod";
 
 const schema = z.object({
@@ -61,14 +60,9 @@ export default function SignIn() {
         <Form
           control={control}
           onSubmit={async ({ data }) => {
-            try {
-              const user = await Api.post("/login", data);
-              toast.success(user?.message);
-              addUser(user);
-              navigate("/");
-            } catch (error) {
-              toast.error(error.message);
-            }
+            const user = await Api.post("/login", data);
+            addUser(user);
+            navigate("/");
           }}
         >
           <div className="pb-4">

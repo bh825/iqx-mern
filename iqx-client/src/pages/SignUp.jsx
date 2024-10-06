@@ -4,7 +4,6 @@ import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
 import { z } from "zod";
 
 const schema = z.object({
@@ -64,11 +63,10 @@ export default function SignUp() {
           control={control}
           onSubmit={async ({ data }) => {
             try {
-              const user = await Api.post("/sign-up", data);
-              toast.success(user.message);
+              await Api.post("/sign-up", data);
               navigate("/sign-in");
             } catch (error) {
-              toast.error(error.message);
+              console(error.message);
             }
           }}
         >
