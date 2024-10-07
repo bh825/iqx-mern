@@ -6,7 +6,9 @@ const PublicMiddleware = require("./utils/PublicMiddleware");
 const path = require("path");
 const MainRouter = require("./routes");
 const compression = require("compression");
-
+const convertXlsx = require("./utils/convertXlsx");
+const schema = require("./utils/schema");
+const { ZodError } = require("zod");
 const app = express();
 
 app.use(cors());
@@ -52,9 +54,17 @@ app.use((err, req, res, next) => {
 });
 
 db.then((a) => {
+  schema.parse(convertXlsx);
   app.listen(process.env.PORT, () => {
     console.log(
       `server is running on ${process.env.PORT} in ${process.env.NODE_ENV} and DB:${a.connections.map((b) => b.name).join(", ")}`
     );
   });
-}).catch(() => process.exit(1));
+}).catch((e) => {
+  if (e instanceof ZodError) {
+    e?.errors.forEach((a) => console.log(`Error Occured: on line ${a.path[0] + 1} and column ${a.path[1]}`));
+    console.log("file validation failed");
+    return process.exit(1);
+  }
+  process.exit(1);
+});
