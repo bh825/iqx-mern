@@ -26,4 +26,16 @@ ProjectRoutes.route("/projects")
     }
   });
 
+ProjectRoutes.route("/projects/:id").get(async (req, res, next) => {
+  try {
+    if (!req.params.id) {
+      throw { status: 400, message: "This is not valid project. Go Back and select a project." };
+    }
+    const project = await projects.findById(req.params.id);
+    return res.send({ data: project });
+  } catch (error) {
+    return next(error);
+  }
+});
+
 module.exports = ProjectRoutes;

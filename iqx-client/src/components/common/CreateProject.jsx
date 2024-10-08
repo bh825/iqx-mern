@@ -21,7 +21,7 @@ const schema = z.object({
     .min(3, "Project name must have 3 characters"),
 });
 
-export default function CreateProject() {
+export default function CreateProject({ mutate }) {
   const [open, setOpen] = useState();
   const {
     register,
@@ -31,7 +31,9 @@ export default function CreateProject() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="rounded-full">Create new Project</Button>
+        <Button className="rounded-full bg-[#19074B]">
+          Create new Project
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <Form
@@ -39,6 +41,7 @@ export default function CreateProject() {
           onSubmit={async ({ data }) => {
             await Api.post("/projects", data);
             setOpen(false);
+            mutate();
           }}
         >
           <DialogHeader>

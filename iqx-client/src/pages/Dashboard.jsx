@@ -1,10 +1,13 @@
 import CreateProject from "@/components/common/CreateProject";
 import Loader from "@/components/common/Loader";
 import { Button } from "@/components/ui/button";
+import moment from "moment";
+import { useNavigate } from "react-router-dom";
 import useSWR from "swr";
 
 export default function Dashboard() {
-  const { data, isLoading, error } = useSWR("/projects");
+  const { data, isLoading, error, mutate } = useSWR("/projects");
+  const navigate = useNavigate();
   const getContent = () => {
     if (isLoading) {
       return <Loader />;
@@ -15,18 +18,46 @@ export default function Dashboard() {
     }
 
     return (
-      <div>
-        <div className="grid grid-cols-[1fr_auto_auto] items-center p-6">
+      <div className="p-6">
+        <div className="grid grid-cols-[1fr_auto_auto] items-center pb-6">
           <p className="text-4xl">Projects</p>
-          <CreateProject />
+          <CreateProject mutate={mutate} />
         </div>
         {data?.data?.length ? (
-          <div>Projects availabel</div>
+          <div className="space-y-6">
+            {data?.data?.map((a, i) => (
+              <div
+                key={i}
+                className="grid grid-cols-[1fr_auto] rounded-xl border p-4"
+              >
+                <div>
+                  <p className="text-2xl font-medium capitalize">{a.name}</p>
+                  <div className="flex gap-4">
+                    <p className="text-sm">
+                      Created: {moment(a?.createdAt).format("DD/MM/YYYY")}
+                    </p>
+                    <p>Last Edited : {moment(a?.updatedAt).fromNow()}</p>
+                  </div>
+                </div>
+                <div>
+                  <Button
+                    onClick={() =>
+                      navigate("/projects", { state: { _id: a?._id } })
+                    }
+                    className="block h-full rounded-xl bg-[#182AA0] px-12 text-base shadow-lg"
+                  >
+                    <p>{a?.is_started ? "Resume" : "Start"}</p>
+                    <p>Assessment</p>
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </div>
         ) : (
           <div className="text-center">
             <img src="/no-data.svg" className="mx-auto mt-12 block max-w-32" />
             <p className="py-4 text-lg">You are not created any projects</p>
-            <CreateProject />
+            <CreateProject mutate={mutate} />
           </div>
         )}
       </div>
