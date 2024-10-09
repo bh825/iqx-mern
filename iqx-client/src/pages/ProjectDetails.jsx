@@ -1,11 +1,12 @@
 import Domains from "@/components/common/Domains";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function ProjectDetails({ clauses }) {
   const [domain, setDomain] = useState([]);
   const [framework, setFrameWork] = useState([]);
-
+  const navigate = useNavigate();
   const controls = clauses?.filter(
     (a) => domain?.includes(a?.Domain) && framework.includes(a?.Framework)
   );
@@ -38,7 +39,14 @@ export default function ProjectDetails({ clauses }) {
         <p className="font-bold text-white">Select Domain</p>
         <Domains
           placeholder="Domain"
-          setData={setDomain}
+          domain={domain}
+          setData={(checked, a) => {
+            if (checked === true) {
+              setDomain((prev) => [...prev, a]);
+            } else {
+              setDomain((prev) => prev.filter((b) => b !== a));
+            }
+          }}
           domains={clauses
             ?.map((a) => a.Domain)
             ?.filter((a, i, arr) => arr.indexOf(a) === i)}
@@ -46,7 +54,14 @@ export default function ProjectDetails({ clauses }) {
         <p className="font-bold text-white">Select Framework</p>
         <Domains
           placeholder="Framework"
-          setData={setFrameWork}
+          domain={framework}
+          setData={(checked, a) => {
+            if (checked === true) {
+              setFrameWork((prev) => [...prev, a]);
+            } else {
+              setFrameWork((prev) => prev.filter((b) => b !== a));
+            }
+          }}
           domains={clauses
             ?.filter((a) => domain.includes(a.Domain))
             ?.map((a) => a.Framework)
@@ -65,7 +80,10 @@ export default function ProjectDetails({ clauses }) {
                 <p>{a.Control}</p>
               </div>
               <div className="grid justify-end">
-                <Button className="h-8 rounded-full bg-[#001F76]">
+                <Button
+                  className="h-8 rounded-full bg-[#001F76]"
+                  onClick={() => navigate("/reviews", { state: a })}
+                >
                   Compliant Checks
                 </Button>
                 <div className="mx-auto grid grid-cols-[repeat(5,12px)] gap-4 pt-2">

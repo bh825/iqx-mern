@@ -8,6 +8,7 @@ import Dashboard from "./pages/Dashboard";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Projects from "./pages/Projects";
+import Review from "./pages/Review";
 
 export default function routes() {
   return (
@@ -31,6 +32,7 @@ export default function routes() {
         <Route element={<PrivateRoute />}>
           <Route path="/" element={<Dashboard />} />
           <Route path="/projects" element={<Projects />} />
+          <Route path="/reviews" element={<Review />} />
         </Route>
       </Routes>
       <ToastContainer position="top-right" autoClose={5000} theme="dark" />
