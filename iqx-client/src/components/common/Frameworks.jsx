@@ -19,11 +19,11 @@ export default function Frameworks({ frameworks, domain, setDomain }) {
               className="grid grid-cols-[auto_1fr] items-center gap-4"
             >
               <Checkbox
-                id={`${a?.Framework}${i}`}
+                id={`${a?.framework}${i}`}
                 checked={domain?.a?.is_selected}
                 onCheckedChange={(checked) => setDomain(checked, a)}
               />
-              <Label htmlFor={`${a?.Framework}${i}`}>{a?.Framework}</Label>
+              <Label htmlFor={`${a?.Framework}${i}`}>{a?.framework}</Label>
             </div>
           ))
         ) : (
