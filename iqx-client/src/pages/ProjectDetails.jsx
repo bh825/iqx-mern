@@ -3,7 +3,12 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import Review from "./Review";
 
-export default function ProjectDetails({ clauses, project_id }) {
+export default function ProjectDetails({
+  clauses,
+  project_id,
+  project,
+  mutate,
+}) {
   const [domain, setDomain] = useState([]);
   const [framework, setFrameWork] = useState([]);
   const [status, setStatus] = useState("Planning");
@@ -122,7 +127,15 @@ export default function ProjectDetails({ clauses, project_id }) {
           ))}
         </div>
       </div>
-      {open && <Review open={open} setOpen={setOpen} clauses={clauses} />}
+      {open && (
+        <Review
+          open={open}
+          setOpen={setOpen}
+          clauses={clauses}
+          project={project}
+          mutate={mutate}
+        />
+      )}
     </div>
   );
 }

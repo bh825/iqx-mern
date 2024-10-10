@@ -1,11 +1,11 @@
 import Loader from "@/components/common/Loader";
-import { useLocation } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import useSWR from "swr";
 import ProjectDetails from "./ProjectDetails";
 
 export default function Projects() {
   const { state } = useLocation();
-  const { data, isLoading, error } = useSWR(
+  const { data, isLoading, error, mutate } = useSWR(
     state?._id && `/projects/${state?._id}`
   );
   const {
@@ -28,12 +28,16 @@ export default function Projects() {
       </div>
     );
   }
+  if (!data.data) {
+    return <Navigate to="/" />;
+  }
 
   return (
     <ProjectDetails
       clauses={clauses?.data}
       project={data?.data}
       project_id={state?._id}
+      mutate={mutate}
     />
   );
 }

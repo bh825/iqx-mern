@@ -13,18 +13,28 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 
-export default function Review({ open, setOpen, clauses }) {
-  const [droppedItems, setDroppedItems] = useState([]);
-  const handleDrop = (item) => {
-    console.log(item);
+export default function Review({ open, setOpen, clauses, project, mutate }) {
+  console.log(open);
 
-    setDroppedItems((prevItems) =>
-      [...prevItems, item]?.filter((a, i, arr) => arr.indexOf(a) === i)
-    );
+  const [droppedItems, setDroppedItems] = useState(
+    project?.clauses_data?.filter(
+      (a) =>
+        a?.domain == open?.domain &&
+        a?.framework === open?.framework &&
+        a?.control === open?.control &&
+        a?.status === open?.status
+    )
+  );
+  const handleDrop = (item) => {
+    setDroppedItems((prevItems) => {
+      return [...prevItems, item]?.filter(
+        (a, i, arr) => arr.findIndex((b) => b.question === a.question) === i
+      );
+    });
   };
 
   // const handleRemoveItem = (index) => {
@@ -33,8 +43,21 @@ export default function Review({ open, setOpen, clauses }) {
   //   setDroppedItems(updatedItems);
   // };
 
+  useEffect(() => {
+    setDroppedItems(
+      project?.clauses_data?.filter(
+        (a) =>
+          a?.domain == open?.domain &&
+          a?.framework === open?.framework &&
+          a?.control === open?.control &&
+          a?.status === open?.status
+      )
+    );
+  }, [open, project?.clauses_data]);
+
   const adddata = async (question, marks) => {
     await Api.post("/add-review", { ...open, question, marks });
+    mutate();
   };
 
   return (
@@ -64,7 +87,7 @@ export default function Review({ open, setOpen, clauses }) {
                       a?.control === open?.control
                   )
                   .map((a, i) => (
-                    <DragItem name={a?.question} key={i} />
+                    <DragItem name={a} key={i} />
                   ))}
               </div>
             </div>
@@ -77,11 +100,11 @@ export default function Review({ open, setOpen, clauses }) {
                   key={index}
                   className="grid grid-cols-[1fr_auto] items-center rounded-full border bg-[#00FF1A40] px-4 py-3 leading-none"
                 >
-                  <p>{item.name}</p>
+                  <p>{item.question}</p>
                   <HoverCard openDelay={200}>
                     <HoverCardTrigger asChild>
                       <Button className="h-min items-center gap-2 rounded-full bg-[#001F76] py-1 text-sm">
-                        Drop Down
+                        {item?.marks || "Drop Down"}
                         <svg
                           width="12"
                           height="12"
@@ -108,19 +131,23 @@ export default function Review({ open, setOpen, clauses }) {
                     </HoverCardTrigger>
                     <HoverCardContent className="w-min space-y-2 bg-white p-4 shadow-2xl">
                       <Button
-                        onClick={() => adddata(item.name, "Fully Compliant")}
+                        onClick={() =>
+                          adddata(item.question, "Fully Compliant")
+                        }
                         className="h-min w-full rounded-full bg-green-300 px-3 py-1.5 text-black hover:bg-green-600"
                       >
                         Fully Compliant
                       </Button>
                       <Button
-                        onClick={() => adddata(item.name, "Partial Compliant")}
+                        onClick={() =>
+                          adddata(item.question, "Partial Compliant")
+                        }
                         className="h-min rounded-full bg-amber-300 px-3 py-1.5 text-black hover:bg-amber-600"
                       >
                         Partial Compliant
                       </Button>
                       <Button
-                        onClick={() => adddata(item.name, "Non Compliant")}
+                        onClick={() => adddata(item.question, "Non Compliant")}
                         className="h-min w-full rounded-full bg-red-300 px-3 py-1.5 text-black hover:bg-red-600"
                       >
                         Non Compliant
