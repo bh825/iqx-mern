@@ -135,7 +135,7 @@ export default function Dashboard() {
           </Button>
         </div>
       </div>
-      <div className="bg-[#0027F2]"></div>
+      <div className="bg-[#0027F260]"></div>
       <div className="px-6 pb-6">
         <div className="h-full overflow-auto rounded-xl bg-white">
           {getContent()}

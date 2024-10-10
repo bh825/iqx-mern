@@ -29,5 +29,11 @@ export default function Projects() {
     );
   }
 
-  return <ProjectDetails clauses={clauses?.data} project={data?.data} />;
+  return (
+    <ProjectDetails
+      clauses={clauses?.data}
+      project={data?.data}
+      project_id={state?._id}
+    />
+  );
 }

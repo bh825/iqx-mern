@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import Review from "./Review";
 
-export default function ProjectDetails({ clauses }) {
+export default function ProjectDetails({ clauses, project_id }) {
   const [domain, setDomain] = useState([]);
   const [framework, setFrameWork] = useState([]);
   const [status, setStatus] = useState("Planning");
@@ -105,7 +105,7 @@ export default function ProjectDetails({ clauses }) {
               <div className="grid justify-end">
                 <Button
                   className="h-8 rounded-full bg-[#001F76]"
-                  onClick={() => setOpen(a)}
+                  onClick={() => setOpen({ ...a, status, project_id })}
                 >
                   Compliant Checks
                 </Button>

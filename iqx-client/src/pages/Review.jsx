@@ -1,3 +1,4 @@
+import Api from "@/api";
 import DragItem from "@/components/common/DropItem";
 import DropZone from "@/components/common/DropZone";
 import { Button } from "@/components/ui/button";
@@ -31,6 +32,11 @@ export default function Review({ open, setOpen, clauses }) {
   //   updatedItems.splice(index, 1);
   //   setDroppedItems(updatedItems);
   // };
+
+  const adddata = async (question, marks) => {
+    await Api.post("/add-review", { ...open, question, marks });
+  };
+
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetContent side="bottom">
@@ -101,13 +107,22 @@ export default function Review({ open, setOpen, clauses }) {
                       </Button>
                     </HoverCardTrigger>
                     <HoverCardContent className="w-min space-y-2 bg-white p-4 shadow-2xl">
-                      <Button className="h-min w-full rounded-full bg-green-300 px-3 py-1.5 text-black hover:bg-green-600">
+                      <Button
+                        onClick={() => adddata(item.name, "Fully Compliant")}
+                        className="h-min w-full rounded-full bg-green-300 px-3 py-1.5 text-black hover:bg-green-600"
+                      >
                         Fully Compliant
                       </Button>
-                      <Button className="h-min rounded-full bg-amber-300 px-3 py-1.5 text-black hover:bg-amber-600">
+                      <Button
+                        onClick={() => adddata(item.name, "Partial Compliant")}
+                        className="h-min rounded-full bg-amber-300 px-3 py-1.5 text-black hover:bg-amber-600"
+                      >
                         Partial Compliant
                       </Button>
-                      <Button className="h-min w-full rounded-full bg-red-300 px-3 py-1.5 text-black hover:bg-red-600">
+                      <Button
+                        onClick={() => adddata(item.name, "Non Compliant")}
+                        className="h-min w-full rounded-full bg-red-300 px-3 py-1.5 text-black hover:bg-red-600"
+                      >
                         Non Compliant
                       </Button>
                     </HoverCardContent>
