@@ -1,11 +1,14 @@
 import CreateProject from "@/components/common/CreateProject";
+import exportToExcel from "@/components/common/exportToExcel";
 import Loader from "@/components/common/Loader";
 import { Button } from "@/components/ui/button";
 import moment from "moment";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useSWR from "swr";
 
 export default function Dashboard() {
+  const [active, setActive] = useState("Projects");
   const { data, isLoading, error, mutate } = useSWR("/projects");
   const navigate = useNavigate();
   const getContent = () => {
@@ -40,15 +43,41 @@ export default function Dashboard() {
                   </div>
                 </div>
                 <div>
-                  <Button
-                    onClick={() =>
-                      navigate("/projects", { state: { _id: a?._id } })
+                  {(() => {
+                    if (active === "Reports") {
+                      return (
+                        <Button
+                          onClick={() => exportToExcel(a)}
+                          className="block h-full rounded-xl bg-[#182AA0] px-12 text-base shadow-lg"
+                        >
+                          Download Reports
+                        </Button>
+                      );
                     }
-                    className="block h-full rounded-xl bg-[#182AA0] px-12 text-base shadow-lg"
-                  >
-                    <p>{a?.is_started ? "Resume" : "Start"}</p>
-                    <p>Assessment</p>
-                  </Button>
+                    if (active === "Dashboard") {
+                      return (
+                        <Button
+                          onClick={() =>
+                            navigate("/dashboard", { state: { _id: a?._id } })
+                          }
+                          className="block h-full rounded-xl bg-[#182AA0] px-12 text-base shadow-lg"
+                        >
+                          Go to Dashboard
+                        </Button>
+                      );
+                    }
+                    return (
+                      <Button
+                        onClick={() =>
+                          navigate("/projects", { state: { _id: a?._id } })
+                        }
+                        className="block h-full rounded-xl bg-[#182AA0] px-12 text-base shadow-lg"
+                      >
+                        <p>{a?.is_started ? "Resume" : "Start"}</p>
+                        <p>Assessment</p>
+                      </Button>
+                    );
+                  })()}
                 </div>
               </div>
             ))}
@@ -69,7 +98,10 @@ export default function Dashboard() {
         <p className="text-4xl font-bold tracking-widest text-white">IQX</p>
         <div className="rounded-xl bg-white shadow-[0px_4px_4px_0px_#00000040_inset]">
           <div className="pt-12"></div>
-          <div className="grid grid-cols-[auto_1fr_auto] items-center gap-4 border-b px-4 pb-6 pt-12">
+          <div
+            className="grid cursor-pointer grid-cols-[auto_1fr_auto] items-center gap-4 border-b px-4 pb-6 pt-12"
+            onClick={() => setActive("Projects")}
+          >
             <svg
               width="2.3vw"
               viewBox="0 0 49 44"
@@ -83,25 +115,48 @@ export default function Dashboard() {
               />
             </svg>
             <p className="text-2xl">Projects</p>
-            <div className="flex h-10 w-10 items-center justify-center rounded-full border border-black/25">
-              <svg
-                width="20"
-                viewBox="0 0 26 21"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M15.5228 20.66L25.6667 11L15.5228 1.34001C15.4312 1.22603 15.3148 1.13204 15.1815 1.06438C15.0482 0.99673 14.9011 0.956997 14.7502 0.947876C14.5993 0.938754 14.4481 0.960457 14.3068 1.01151C14.1655 1.06257 14.0374 1.14179 13.9313 1.24381C13.8251 1.34583 13.7433 1.46826 13.6915 1.60283C13.6396 1.7374 13.6189 1.88095 13.6306 2.02377C13.6424 2.16659 13.6865 2.30535 13.7598 2.43064C13.8331 2.55594 13.9339 2.66485 14.0555 2.75001L21.645 10L1.45221 10C1.17226 10 0.903776 10.1054 0.705822 10.2929C0.507866 10.4804 0.396656 10.7348 0.396656 11C0.396656 11.2652 0.507866 11.5196 0.705822 11.7071C0.903776 11.8946 1.17226 12 1.45221 12L21.645 12L14.0555 19.25C13.8582 19.4383 13.7479 19.6932 13.7488 19.9585C13.7498 20.2239 13.8621 20.478 14.0608 20.665C14.2596 20.852 14.5286 20.9565 14.8087 20.9556C15.0888 20.9546 15.3571 20.8483 15.5544 20.66H15.5228Z"
-                  fill="#9747FF"
-                />
-              </svg>
-            </div>
+            {active === "Projects" && (
+              <div className="flex h-9 w-9 items-center justify-center rounded-full border border-black/25">
+                <svg
+                  width="20"
+                  viewBox="0 0 26 21"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M15.5228 20.66L25.6667 11L15.5228 1.34001C15.4312 1.22603 15.3148 1.13204 15.1815 1.06438C15.0482 0.99673 14.9011 0.956997 14.7502 0.947876C14.5993 0.938754 14.4481 0.960457 14.3068 1.01151C14.1655 1.06257 14.0374 1.14179 13.9313 1.24381C13.8251 1.34583 13.7433 1.46826 13.6915 1.60283C13.6396 1.7374 13.6189 1.88095 13.6306 2.02377C13.6424 2.16659 13.6865 2.30535 13.7598 2.43064C13.8331 2.55594 13.9339 2.66485 14.0555 2.75001L21.645 10L1.45221 10C1.17226 10 0.903776 10.1054 0.705822 10.2929C0.507866 10.4804 0.396656 10.7348 0.396656 11C0.396656 11.2652 0.507866 11.5196 0.705822 11.7071C0.903776 11.8946 1.17226 12 1.45221 12L21.645 12L14.0555 19.25C13.8582 19.4383 13.7479 19.6932 13.7488 19.9585C13.7498 20.2239 13.8621 20.478 14.0608 20.665C14.2596 20.852 14.5286 20.9565 14.8087 20.9556C15.0888 20.9546 15.3571 20.8483 15.5544 20.66H15.5228Z"
+                    fill="#9747FF"
+                  />
+                </svg>
+              </div>
+            )}
           </div>
-          <div className="grid grid-cols-[auto_1fr_auto] items-center gap-4 border-b px-4 pb-6 pt-12">
+          <div
+            className="grid cursor-pointer grid-cols-[auto_1fr_auto] items-center gap-4 border-b px-4 pb-6 pt-12"
+            onClick={() => setActive("Reports")}
+          >
             <img src="/Reports.png" className="w-[2.3vw]" />
             <p className="text-2xl">Reports</p>
+            {active === "Reports" && (
+              <div className="flex h-9 w-9 items-center justify-center rounded-full border border-black/25">
+                <svg
+                  width="20"
+                  viewBox="0 0 26 21"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M15.5228 20.66L25.6667 11L15.5228 1.34001C15.4312 1.22603 15.3148 1.13204 15.1815 1.06438C15.0482 0.99673 14.9011 0.956997 14.7502 0.947876C14.5993 0.938754 14.4481 0.960457 14.3068 1.01151C14.1655 1.06257 14.0374 1.14179 13.9313 1.24381C13.8251 1.34583 13.7433 1.46826 13.6915 1.60283C13.6396 1.7374 13.6189 1.88095 13.6306 2.02377C13.6424 2.16659 13.6865 2.30535 13.7598 2.43064C13.8331 2.55594 13.9339 2.66485 14.0555 2.75001L21.645 10L1.45221 10C1.17226 10 0.903776 10.1054 0.705822 10.2929C0.507866 10.4804 0.396656 10.7348 0.396656 11C0.396656 11.2652 0.507866 11.5196 0.705822 11.7071C0.903776 11.8946 1.17226 12 1.45221 12L21.645 12L14.0555 19.25C13.8582 19.4383 13.7479 19.6932 13.7488 19.9585C13.7498 20.2239 13.8621 20.478 14.0608 20.665C14.2596 20.852 14.5286 20.9565 14.8087 20.9556C15.0888 20.9546 15.3571 20.8483 15.5544 20.66H15.5228Z"
+                    fill="#9747FF"
+                  />
+                </svg>
+              </div>
+            )}
           </div>
-          <div className="grid grid-cols-[auto_1fr_auto] items-center gap-4 border-b px-4 pb-6 pt-12">
+          <div
+            className="grid cursor-pointer grid-cols-[auto_1fr_auto] items-center gap-4 border-b px-4 pb-6 pt-12"
+            onClick={() => setActive("Dashboard")}
+          >
             <svg
               width="2.3vw"
               viewBox="0 0 53 48"
@@ -125,8 +180,22 @@ export default function Dashboard() {
                 fill="#699BF7"
               />
             </svg>
-
             <p className="text-2xl">Dashboard</p>
+            {active === "Dashboard" && (
+              <div className="flex h-9 w-9 items-center justify-center rounded-full border border-black/25">
+                <svg
+                  width="20"
+                  viewBox="0 0 26 21"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M15.5228 20.66L25.6667 11L15.5228 1.34001C15.4312 1.22603 15.3148 1.13204 15.1815 1.06438C15.0482 0.99673 14.9011 0.956997 14.7502 0.947876C14.5993 0.938754 14.4481 0.960457 14.3068 1.01151C14.1655 1.06257 14.0374 1.14179 13.9313 1.24381C13.8251 1.34583 13.7433 1.46826 13.6915 1.60283C13.6396 1.7374 13.6189 1.88095 13.6306 2.02377C13.6424 2.16659 13.6865 2.30535 13.7598 2.43064C13.8331 2.55594 13.9339 2.66485 14.0555 2.75001L21.645 10L1.45221 10C1.17226 10 0.903776 10.1054 0.705822 10.2929C0.507866 10.4804 0.396656 10.7348 0.396656 11C0.396656 11.2652 0.507866 11.5196 0.705822 11.7071C0.903776 11.8946 1.17226 12 1.45221 12L21.645 12L14.0555 19.25C13.8582 19.4383 13.7479 19.6932 13.7488 19.9585C13.7498 20.2239 13.8621 20.478 14.0608 20.665C14.2596 20.852 14.5286 20.9565 14.8087 20.9556C15.0888 20.9546 15.3571 20.8483 15.5544 20.66H15.5228Z"
+                    fill="#9747FF"
+                  />
+                </svg>
+              </div>
+            )}
           </div>
         </div>
         <div>

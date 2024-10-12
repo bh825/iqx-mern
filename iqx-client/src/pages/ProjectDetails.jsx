@@ -2,6 +2,7 @@ import Domains from "@/components/common/Domains";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import Review from "./Review";
+import { useNavigate } from "react-router-dom";
 
 export default function ProjectDetails({
   clauses,
@@ -9,6 +10,7 @@ export default function ProjectDetails({
   project,
   mutate,
 }) {
+  const navigate = useNavigate();
   const [domain, setDomain] = useState([]);
   const [framework, setFrameWork] = useState([]);
   const [status, setStatus] = useState("Planning");
@@ -35,7 +37,12 @@ export default function ProjectDetails({
           gridTemplateColumns: `auto 1fr repeat(4, auto) 1fr`,
         }}
       >
-        <p className="text-5xl font-bold tracking-wide">IQX</p>
+        <p
+          className="cursor-pointer text-5xl font-bold tracking-wide"
+          onClick={() => navigate("/")}
+        >
+          IQX
+        </p>
         <div></div>
         {[
           "Planning",
