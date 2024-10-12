@@ -7,14 +7,16 @@ export default function exportToExcel(project) {
     ?.filter((a, i, arr) => arr.indexOf(a) === i);
   statuses.forEach((element) => {
     const worksheet = xlsx.utils.json_to_sheet(
-      project.clauses_data?.map((a) => ({
-        domain: a?.domain,
-        framework: a?.framework,
-        control: a?.control,
-        question: a?.question,
-        marks: a?.marks,
-        risk: a?.risk,
-      }))
+      project.clauses_data
+        ?.filter((a) => a.status === element)
+        ?.map((a) => ({
+          domain: a?.domain,
+          framework: a?.framework,
+          control: a?.control,
+          question: a?.question,
+          marks: a?.marks,
+          risk: a?.risk,
+        }))
     );
     xlsx.utils.book_append_sheet(workbook, worksheet, element);
   });
