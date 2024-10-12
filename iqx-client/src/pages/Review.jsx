@@ -3,16 +3,17 @@ import DragItem from "@/components/common/DropItem";
 import DropZone from "@/components/common/DropZone";
 import { Button } from "@/components/ui/button";
 import {
-  HoverCard,
-  HoverCardTrigger,
-  HoverCardContent,
-} from "@/components/ui/hover-card";
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
+import { X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -60,6 +61,11 @@ export default function Review({ open, setOpen, clauses, project, mutate }) {
     mutate();
   };
 
+  const addRisk = async (question, risk) => {
+    await Api.post("/add-review", { ...open, question, risk });
+    mutate();
+  };
+
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetContent side="bottom">
@@ -73,7 +79,7 @@ export default function Review({ open, setOpen, clauses, project, mutate }) {
           </p>
         </SheetHeader>
         <DndProvider backend={HTML5Backend}>
-          <div className="mx-auto grid max-w-7xl grid-cols-2 items-stretch py-12">
+          <div className="mx-auto grid max-w-7xl grid-cols-[45%_1fr] items-stretch py-12">
             <div className="border-r-2 border-black px-[5%] xl:px-[10%]">
               <h2 className="pb-4 text-center font-bold underline underline-offset-4">
                 Available Control Checks
@@ -98,11 +104,11 @@ export default function Review({ open, setOpen, clauses, project, mutate }) {
               {droppedItems.map((item, index) => (
                 <div
                   key={index}
-                  className="grid grid-cols-[1fr_auto] items-center rounded-full border bg-[#00FF1A40] px-4 py-3 leading-none"
+                  className="grid grid-cols-[1fr_auto_auto_auto] items-center gap-2 rounded-full border bg-[#00FF1A40] px-4 py-3 leading-none"
                 >
                   <p>{item.question}</p>
-                  <HoverCard openDelay={200}>
-                    <HoverCardTrigger asChild>
+                  <Popover>
+                    <PopoverTrigger asChild>
                       <Button className="h-min items-center gap-2 rounded-full bg-[#001F76] py-1 text-sm">
                         {item?.marks || "Drop Down"}
                         <svg
@@ -128,8 +134,8 @@ export default function Review({ open, setOpen, clauses, project, mutate }) {
                           </defs>
                         </svg>
                       </Button>
-                    </HoverCardTrigger>
-                    <HoverCardContent className="w-min space-y-2 bg-white p-4 shadow-2xl">
+                    </PopoverTrigger>
+                    <PopoverContent className="w-min space-y-2 bg-white p-4 shadow-2xl">
                       <Button
                         onClick={() =>
                           adddata(item.question, "Fully Compliant")
@@ -152,8 +158,72 @@ export default function Review({ open, setOpen, clauses, project, mutate }) {
                       >
                         Non Compliant
                       </Button>
-                    </HoverCardContent>
-                  </HoverCard>
+                    </PopoverContent>
+                  </Popover>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button className="h-min items-center gap-2 rounded-full bg-[#001F76] py-1 text-sm">
+                        {item?.risk || "Drop Down"}
+                        <svg
+                          width="12"
+                          height="12"
+                          viewBox="0 0 12 12"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <g clipPath="url(#clip0_3_9)">
+                            <path
+                              d="M0 3L6 9L12 3"
+                              stroke="white"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                          </g>
+                          <defs>
+                            <clipPath id="clip0_3_9">
+                              <rect width="12" height="12" fill="white" />
+                            </clipPath>
+                          </defs>
+                        </svg>
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-min space-y-2 bg-white p-4 shadow-2xl">
+                      <Button
+                        onClick={() => addRisk(item.question, "Low")}
+                        className="h-min w-full rounded-full bg-green-300 px-3 py-1.5 text-black hover:bg-green-600"
+                      >
+                        Low
+                      </Button>
+                      <Button
+                        onClick={() => addRisk(item.question, "Medium")}
+                        className="h-min rounded-full bg-amber-300 px-3 py-1.5 text-black hover:bg-amber-600"
+                      >
+                        Medium
+                      </Button>
+                      <Button
+                        onClick={() => addRisk(item.question, "High")}
+                        className="h-min w-full rounded-full bg-red-300 px-3 py-1.5 text-black hover:bg-red-600"
+                      >
+                        High
+                      </Button>
+                    </PopoverContent>
+                  </Popover>
+                  <Button
+                    variant="icon"
+                    className="p-0"
+                    onClick={async () => {
+                      if (item?._id) {
+                        await Api.put("/add-review", {
+                          ...item,
+                          project_id: open?.project_id,
+                        });
+                        mutate();
+                      }
+                    }}
+                  >
+                    <X />
+                  </Button>
                 </div>
               ))}
             </DropZone>
@@ -176,21 +246,33 @@ export default function Review({ open, setOpen, clauses, project, mutate }) {
             <div>
               <p className="font-bold text-white">Partial Compliant</p>
               <p className="pt-1 text-center text-5xl font-bold text-white">
-                20
+                {
+                  project?.clauses_data?.filter(
+                    (a) => a.marks === "Partial Compliant"
+                  )?.length
+                }
               </p>
             </div>
             <div className="border-l-2"></div>
             <div>
               <p className="font-bold text-white">Non Compliant</p>
               <p className="pt-1 text-center text-5xl font-bold text-white">
-                20
+                {
+                  project?.clauses_data?.filter(
+                    (a) => a.marks === "Non Compliant"
+                  )?.length
+                }
               </p>
             </div>
             <div className="border-l-2"></div>
             <div>
               <p className="font-bold text-white">Fully Compliant </p>
               <p className="pt-1 text-center text-5xl font-bold text-white">
-                20
+                {
+                  project?.clauses_data?.filter(
+                    (a) => a.marks === "Fully Compliant"
+                  )?.length
+                }
               </p>
             </div>
           </div>

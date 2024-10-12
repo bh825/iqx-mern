@@ -8,7 +8,7 @@ ProjectRoutes.route("/projects")
       if (!req?.auth?._id) {
         throw { status: 401, message: "You are not allowed to make Request" };
       }
-      const project = await projects.find({ createdBy: req?.auth });
+      const project = await projects.find({ createdBy: req?.auth }).select("-history");
       return res.send({ data: project });
     } catch (error) {
       return next(error);
@@ -31,7 +31,7 @@ ProjectRoutes.route("/projects/:id").get(async (req, res, next) => {
     if (!req.params.id) {
       throw { status: 400, message: "This is not valid project. Go Back and select a project." };
     }
-    const project = await projects.findById(req.params.id);
+    const project = await projects.findById(req.params.id).select("-history");
     return res.send({ data: project });
   } catch (error) {
     return next(error);

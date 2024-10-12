@@ -23,7 +23,19 @@ const schema = new mongoose.Schema(
         framework: { type: String, required: [true, "{PATH} is required"] },
         control: { type: String, required: [true, "{PATH} is required"] },
         question: { type: String, required: [true, "{PATH} is required"] },
-        marks: { type: String, required: [true, "{PATH} is required"], enum: ["Partial Compliant", "Non Compliant", "Fully Compliant"] }
+        marks: { type: String, enum: ["Partial Compliant", "Non Compliant", "Fully Compliant"] },
+        risk: { type: String, enum: ["High", "Medium", "Low"] }
+      }
+    ],
+    history: [
+      {
+        status: { type: String, required: [true, "{PATH} is required"] },
+        domain: { type: String, required: [true, "{PATH} is required"] },
+        framework: { type: String, required: [true, "{PATH} is required"] },
+        control: { type: String, required: [true, "{PATH} is required"] },
+        question: { type: String, required: [true, "{PATH} is required"] },
+        marks: { type: String, enum: ["Partial Compliant", "Non Compliant", "Fully Compliant"] },
+        risk: { type: String, enum: ["High", "Medium", "Low"] }
       }
     ]
   },
