@@ -2,12 +2,17 @@ import CreateProject from "@/components/common/CreateProject";
 import exportToExcel from "@/components/common/exportToExcel";
 import Loader from "@/components/common/Loader";
 import { Button } from "@/components/ui/button";
+import { Popover, PopoverContent } from "@/components/ui/popover";
+import { useUserStore } from "@/store/user";
+import { PopoverTrigger } from "@radix-ui/react-popover";
 import moment from "moment";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useSWR from "swr";
 
 export default function Dashboard() {
+  const addUser = useUserStore((state) => state.addUser);
+  const { data: user } = useSWR("/common/data");
   const [active, setActive] = useState("Projects");
   const { data, isLoading, error, mutate } = useSWR("/projects");
   const navigate = useNavigate();
@@ -199,12 +204,48 @@ export default function Dashboard() {
           </div>
         </div>
         <div>
-          <Button className="w-full rounded-xl bg-black/30 text-lg">
+          <Button
+            className="w-full rounded-xl bg-black/30 text-lg"
+            onClick={() => addUser({})}
+          >
             Logout
           </Button>
         </div>
       </div>
-      <div className="bg-[#0027F260]"></div>
+      <div className="flex items-center justify-end gap-4 bg-[#0027F260] px-4">
+        <p className="text-white">{user?.data?.email}</p>
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button
+              variant="icon"
+              className="aspect-square rounded-full bg-[#14CDCD] p-0"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+              </svg>
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent
+            className="space-y-2 bg-white p-4 shadow-2xl"
+            align="end"
+          >
+            <p className="pb-2 font-semibold">Profile</p>
+            <p className="text-sm leading-none text-gray-700">Email</p>
+            <p>{user?.data?.email}</p>
+          </PopoverContent>
+        </Popover>
+      </div>
       <div className="px-6 pb-6">
         <div className="h-full overflow-auto rounded-xl bg-white">
           {getContent()}

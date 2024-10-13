@@ -35,7 +35,8 @@ const schema = new mongoose.Schema(
         control: { type: String, required: [true, "{PATH} is required"] },
         question: { type: String, required: [true, "{PATH} is required"] },
         marks: { type: String, enum: ["Partial Compliant", "Non Compliant", "Fully Compliant"] },
-        risk: { type: String, enum: ["High", "Medium", "Low"] }
+        risk: { type: String, enum: ["High", "Medium", "Low"] },
+        time: { type: Date, required: [true, "{PATH} is required"] }
       }
     ]
   },

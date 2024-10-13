@@ -8,7 +8,7 @@ ProjectRoutes.route("/projects")
       if (!req?.auth?._id) {
         throw { status: 401, message: "You are not allowed to make Request" };
       }
-      const project = await projects.find({ createdBy: req?.auth }).select("-history");
+      const project = await projects.find({ createdBy: req?.auth });
       return res.send({ data: project });
     } catch (error) {
       return next(error);

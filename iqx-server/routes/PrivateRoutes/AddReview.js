@@ -29,10 +29,14 @@ AddReview.route("/add-review")
         await project.save();
         return res.send({ message: "Marks added successfully." });
       } else {
-        const history = { ...project.clauses_data[available] };
-        if (history?._id && history?.marks && history?.risk) {
+        const history = { ...project.clauses_data[available].toJSON(), time: new Date() };
+
+        if (
+          history?._id &&
+          ((req.body?.marks && history?.marks !== req.body?.marks) || (req.body?.risk && history?.risk !== req.body?.risk))
+        ) {
           delete history?._id;
-          project.history.push();
+          project.history.push(history);
         }
         if (req.body?.marks) {
           project.clauses_data[available].marks = req.body?.marks;
@@ -57,7 +61,7 @@ AddReview.route("/add-review")
       }
       await projects.findByIdAndUpdate(req.body?.project_id, {
         $pull: { clauses_data: { _id: req.body?._id } },
-        $addToSet: { history: req.body }
+        $addToSet: { history: { ...req.body, time: new Date() } }
       });
       return res.send({ message: "review deleted successfully." });
     } catch (error) {

@@ -90,18 +90,20 @@ export default function VerifyOtp() {
             />
           </div>
           <p className="pt-1 text-sm text-red-500">{errors?.otp?.message}</p>
-          <div className="pt-4">
-            <p className="text-sm">Enter New Password</p>
-            <Input
-              size="large"
-              {...register("password")}
-              className="h-12 rounded-2xl border-none shadow-[0px_4px_4px_0px_#00000040]"
-              placeholder="Password"
-            />
-            <p className="pt-1 text-sm text-red-500">
-              {errors?.password?.message}
-            </p>
-          </div>
+          {state?.verify === "forget" && (
+            <div className="pt-4">
+              <p className="text-sm">Enter New Password</p>
+              <Input
+                size="large"
+                {...register("password")}
+                className="h-12 rounded-2xl border-none shadow-[0px_4px_4px_0px_#00000040]"
+                placeholder="Password"
+              />
+              <p className="pt-1 text-sm text-red-500">
+                {errors?.password?.message}
+              </p>
+            </div>
+          )}
           <Button
             size="lg"
             type="submit"
