@@ -121,14 +121,14 @@ export default function ProjectDetails({
                 >
                   Compliant Checks
                 </Button>
-                <div className="mx-auto grid grid-cols-[repeat(5,12px)] gap-4 pt-2">
+                {/* <div className="mx-auto grid grid-cols-[repeat(5,12px)] gap-4 pt-2">
                   {Array.from({ length: 5 }).map((a, i) => (
                     <div
                       key={i}
                       className="aspect-square rounded-full bg-[#4ECB71]"
                     ></div>
                   ))}
-                </div>
+                </div> */}
               </div>
             </div>
           ))}

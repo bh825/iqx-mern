@@ -80,13 +80,14 @@ export default function Charts() {
 
   return (
     <div className="grid h-screen w-screen grid-rows-[70px_1fr]">
-      <div className="grid items-center gap-6 border-b bg-white px-12 shadow">
+      <div className="grid grid-cols-[auto_1fr] items-center gap-6 border-b bg-white px-12 shadow">
         <p
           className="cursor-pointer text-5xl font-bold tracking-wide"
           onClick={() => navigate("/")}
         >
           IQX
         </p>
+        <p className="text-center text-4xl tracking-wide">{data?.data?.name}</p>
       </div>
       <div className="overflow-auto p-4">
         <div className="grid grid-cols-3 gap-4">

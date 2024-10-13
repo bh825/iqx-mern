@@ -10,7 +10,10 @@ const DropZone = ({ onDrop, children, length }) => {
   }));
 
   return (
-    <div ref={drop} className="relative space-y-3 px-[5%] xl:px-[10%]">
+    <div
+      ref={drop}
+      className="relative max-h-[45vh] space-y-3 overflow-auto px-[5%] xl:px-[10%]"
+    >
       {(isOver || length === 0) && (
         <div className="absolute left-[15%] top-[15%] flex h-[70%] w-[70%] items-center justify-center bg-black/5">
           Drop a Control check here

@@ -1,4 +1,5 @@
 import Api from "@/api";
+import AddControlCheck from "@/components/common/AddControlCheck";
 import DragItem from "@/components/common/DropItem";
 import DropZone from "@/components/common/DropZone";
 import { Button } from "@/components/ui/button";
@@ -228,9 +229,7 @@ export default function Review({ open, setOpen, clauses, project, mutate }) {
           </div>
         </DndProvider>
         <div className="mx-auto w-min py-8">
-          <Button className="h-full rounded-2xl bg-[#001F76] px-5 py-3 text-2xl font-bold">
-            Add Control Check
-          </Button>
+          <AddControlCheck openData={open} mutate={mutate} />
         </div>
         <div className="grid grid-cols-[auto_1fr_auto] items-end">
           <Button
