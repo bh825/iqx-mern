@@ -11,9 +11,22 @@ export default function VerifyOtp() {
   const { state } = useLocation();
   const {
     control,
+    register,
     formState: { isSubmitting, errors },
   } = useForm({
-    resolver: zodResolver(z.object({ otp: z.string() })),
+    resolver: zodResolver(
+      z.object({
+        otp: z.string(),
+        ...(state?.verify === "forget" && {
+          password: z
+            .string()
+            .regex(
+              /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/,
+              "Your password must contain at least one Uppercase, Lowercase, Digit & Special Characters."
+            ),
+        }),
+      })
+    ),
   });
 
   const navigate = useNavigate();
@@ -77,6 +90,18 @@ export default function VerifyOtp() {
             />
           </div>
           <p className="pt-1 text-sm text-red-500">{errors?.otp?.message}</p>
+          <div className="pt-4">
+            <p className="text-sm">Enter New Password</p>
+            <Input
+              size="large"
+              {...register("password")}
+              className="h-12 rounded-2xl border-none shadow-[0px_4px_4px_0px_#00000040]"
+              placeholder="Password"
+            />
+            <p className="pt-1 text-sm text-red-500">
+              {errors?.password?.message}
+            </p>
+          </div>
           <Button
             size="lg"
             type="submit"

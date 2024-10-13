@@ -22,6 +22,8 @@ export default function SignIn() {
     register,
     control,
     formState: { errors, isSubmitting },
+    trigger,
+    watch,
   } = useForm({ resolver: zodResolver(schema) });
   useEffect(() => {
     addUser({});
@@ -90,6 +92,34 @@ export default function SignIn() {
             <p className="pt-1 text-sm text-red-500">
               {errors?.password?.message}
             </p>
+          </div>
+          <div className="flex justify-end">
+            <Button
+              id="forget-button"
+              variant="ghost"
+              type="button"
+              className="h-full p-0 hover:bg-transparent"
+              onClick={async () => {
+                const btn = document.getElementById("forget-button");
+                try {
+                  btn.disabled = true;
+                  const vr = await trigger("email");
+                  const email = watch("email");
+                  if (vr) {
+                    await Api.post("/forget-password", { email });
+                    navigate("/verify", {
+                      state: { verify: "forget", email },
+                    });
+                  }
+                  btn.disabled = false;
+                } catch (error) {
+                  btn.disabled = false;
+                  console.log(error);
+                }
+              }}
+            >
+              Forget Password?
+            </Button>
           </div>
           <Button
             size="lg"

@@ -18,7 +18,7 @@ AuthRoutes.route("/login").post((req, res, next) => {
           message: req?.body?.email ? "You are not signed up with us. Please, Sign up." : "Please, enter email!"
         });
       }
-      if (await data.isPasswordValid(req.body.password)) {
+      if (data?.is_verified && (await data.isPasswordValid(req.body.password))) {
         return res.send({
           status: true,
           message: "You are loggged in. Now, You access all your projects.",
@@ -87,6 +87,26 @@ AuthRoutes.post("/verify", async (req, res, next) => {
     throw { status: 400, message: "This is not a valid request" };
   } catch (error) {
     return next(error);
+  }
+});
+
+AuthRoutes.post("/forget-password", async (req, res, next) => {
+  try {
+    const user = await users.findOne({ email: req.body?.email });
+    if (!user) {
+      throw { status: 400, message: "This e-mail is not sign-up with us" };
+    }
+    user.otp_forget = generateRandomFourDigit();
+    await user.save();
+    await transporter.sendMail({
+      from: "hiraparabh@gmail.com",
+      to: user.email,
+      html: `<p>Thank you for sign-up.</p><p>Your otp is <b>${user.otp_forget}</b></p>`,
+      subject: "Verify your account with IQX"
+    });
+    return res.send({ message: "We have Sent an OTP. to your mail id" });
+  } catch (error) {
+    next(error);
   }
 });
 
