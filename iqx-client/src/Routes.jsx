@@ -9,6 +9,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Projects from "./pages/Projects";
 import Charts from "./pages/Charts";
+import VerifyOtp from "./pages/VerifyOtp";
 
 export default function AllRoutes() {
   return (
@@ -29,6 +30,7 @@ export default function AllRoutes() {
       <Routes>
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/sign-up" element={<SignUp />} />
+        <Route path="/verify" element={<VerifyOtp />} />
         <Route element={<PrivateRoute />}>
           <Route path="/" element={<Dashboard />} />
           <Route path="/projects" element={<Projects />} />

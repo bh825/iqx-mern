@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useUserStore } from "@/store/user";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
 import { Form, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
@@ -22,6 +23,9 @@ export default function SignIn() {
     control,
     formState: { errors, isSubmitting },
   } = useForm({ resolver: zodResolver(schema) });
+  useEffect(() => {
+    addUser({});
+  }, [addUser]);
   return (
     <div className="relative flex h-screen w-screen items-center justify-center bg-[linear-gradient(180deg,_#2118A0_0%,_#1B0419_100%)]">
       <p className="absolute left-[5%] top-4 text-4xl font-semibold tracking-widest text-white">

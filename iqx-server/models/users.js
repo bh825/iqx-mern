@@ -13,7 +13,10 @@ const schema = new mongoose.Schema(
       unique: true,
       lowercase: true
     },
-    password: { type: String, required: [true, "{PATH} is required"] }
+    password: { type: String, required: [true, "{PATH} is required"] },
+    is_verified: { type: Boolean, required: [true, "{PATH} is required"], default: false },
+    otp_create: { type: Number },
+    otp_forget: { type: Number }
   },
   {
     methods: {
@@ -26,6 +29,12 @@ const schema = new mongoose.Schema(
           expiresIn: "1d",
           algorithm: "HS256"
         });
+      },
+      verifyCreateOtp: function (otp) {
+        return Number(otp) === this.otp_create;
+      },
+      verifyforgetOtp: function (otp) {
+        return Number(otp) === this.otp_forget;
       }
     },
     timestamps: true,

@@ -23,7 +23,7 @@ export default function SignUp() {
   const {
     register,
     control,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm({ resolver: zodResolver(schema) });
 
   return (
@@ -64,7 +64,9 @@ export default function SignUp() {
           onSubmit={async ({ data }) => {
             try {
               await Api.post("/sign-up", data);
-              navigate("/sign-in");
+              navigate("/verify", {
+                state: { verify: "create", email: data?.email },
+              });
             } catch (error) {
               console(error.message);
             }
@@ -117,6 +119,7 @@ export default function SignUp() {
           <Button
             size="lg"
             type="submit"
+            disabled={isSubmitting}
             className="mt-2 w-full rounded-2xl bg-[#3C18A0]"
           >
             Get Started

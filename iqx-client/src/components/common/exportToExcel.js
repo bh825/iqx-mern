@@ -1,3 +1,4 @@
+import moment from "moment";
 import * as xlsx from "xlsx";
 
 export default function exportToExcel(project) {
@@ -21,5 +22,8 @@ export default function exportToExcel(project) {
     xlsx.utils.book_append_sheet(workbook, worksheet, element);
   });
 
-  xlsx.writeFile(workbook, `clauses.xlsx`);
+  xlsx.writeFile(
+    workbook,
+    `${project?.name} on ${moment().format("DD-MM-YYYY")}.xlsx`
+  );
 }
