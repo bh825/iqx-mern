@@ -19,8 +19,6 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 
 export default function Review({ open, setOpen, clauses, project, mutate }) {
-  console.log(open);
-
   const [droppedItems, setDroppedItems] = useState(
     project?.clauses_data?.filter(
       (a) =>

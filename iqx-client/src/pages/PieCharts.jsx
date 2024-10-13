@@ -3,8 +3,6 @@ import { Cell, Pie, PieChart, Tooltip } from "recharts";
 const COLORS = ["#A9D18E", "#FFD966", "#F4B183", "#BFBFBF"];
 
 export default function PieCharts({ clauses, clauses_data }) {
-  console.log(clauses_data);
-
   const planning_data = [
     {
       name: "Fully complient",
