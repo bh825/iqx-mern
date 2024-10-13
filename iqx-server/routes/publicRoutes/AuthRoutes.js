@@ -1,5 +1,5 @@
 const users = require("../../models/users");
-const { transporter } = require("../../utils");
+const { transporter, sender } = require("../../utils");
 
 const AuthRoutes = require("express").Router();
 
@@ -54,7 +54,7 @@ AuthRoutes.post("/sign-up", async (req, res, next) => {
       user = await users.create({ ...req.body, otp_create: generateRandomFourDigit() });
     }
     await transporter.sendMail({
-      from: "hiraparabh@gmail.com",
+      from: sender,
       to: user.email,
       html: `<p>Thank you for sign-up.</p><p>Your otp is <b>${user.otp_create}</b></p>`,
       subject: "Verify your account with IQX"
@@ -99,7 +99,7 @@ AuthRoutes.post("/forget-password", async (req, res, next) => {
     user.otp_forget = generateRandomFourDigit();
     await user.save();
     await transporter.sendMail({
-      from: "hiraparabh@gmail.com",
+      from: sender,
       to: user.email,
       html: `<p>Thank you for sign-up.</p><p>Your otp is <b>${user.otp_forget}</b></p>`,
       subject: "Verify your account with IQX"
