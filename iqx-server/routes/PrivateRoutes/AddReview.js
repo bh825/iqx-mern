@@ -7,7 +7,7 @@ AddReview.route("/add-review")
     try {
       if (
         !["status", "domain", "framework", "control", "question", "project_id"].every((a) => req.body?.[a]) ||
-        !["marks", "risk"].some((a) => req.body?.[a])
+        !["marks", "risk", "observation", "review"].some((a) => req.body?.[a])
       ) {
         throw { message: "This is not a valid request", status: 400 };
       }
@@ -20,7 +20,7 @@ AddReview.route("/add-review")
       );
       if (available < 0) {
         project.clauses_data?.push(
-          ["status", "domain", "framework", "control", "question", "marks", "risk"].reduce((acc, cv) => {
+          ["status", "domain", "framework", "control", "question", "marks", "risk", "review", "observation"].reduce((acc, cv) => {
             if (req.body?.[cv]) acc[cv] = req.body?.[cv];
             return acc;
           }, {})
@@ -43,6 +43,12 @@ AddReview.route("/add-review")
         }
         if (req.body?.risk) {
           project.clauses_data[available].risk = req.body?.risk;
+        }
+        if (req.body?.review) {
+          project.clauses_data[available].review = req.body?.review;
+        }
+        if (req.body?.observation) {
+          project.clauses_data[available].observation = req.body?.observation;
         }
 
         await project.validate();

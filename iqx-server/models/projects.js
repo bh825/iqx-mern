@@ -24,7 +24,9 @@ const schema = new mongoose.Schema(
         control: { type: String, required: [true, "{PATH} is required"] },
         question: { type: String, required: [true, "{PATH} is required"] },
         marks: { type: String, enum: ["Partial Compliant", "Non Compliant", "Fully Compliant"] },
-        risk: { type: String, enum: ["High", "Medium", "Low"] }
+        risk: { type: String, enum: ["High", "Medium", "Low"] },
+        review: { type: String },
+        observation: { type: String }
       }
     ],
     history: [
@@ -36,7 +38,9 @@ const schema = new mongoose.Schema(
         question: { type: String, required: [true, "{PATH} is required"] },
         marks: { type: String, enum: ["Partial Compliant", "Non Compliant", "Fully Compliant"] },
         risk: { type: String, enum: ["High", "Medium", "Low"] },
-        time: { type: Date, required: [true, "{PATH} is required"] }
+        time: { type: Date, required: [true, "{PATH} is required"] },
+        review: { type: String },
+        observation: { type: String }
       }
     ]
   },

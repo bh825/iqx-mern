@@ -17,6 +17,8 @@ export default function exportToExcel(project) {
           question: a?.question,
           marks: a?.marks,
           risk: a?.risk,
+          observation: a?.observation,
+          review: a?.review,
         }))
     );
     xlsx.utils.book_append_sheet(workbook, worksheet, element);
