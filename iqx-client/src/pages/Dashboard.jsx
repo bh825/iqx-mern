@@ -9,11 +9,13 @@ import moment from "moment";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useSWR from "swr";
+import AddXlsx from "./AddXlsx";
 
 export default function Dashboard() {
   const addUser = useUserStore((state) => state.addUser);
   const { data: user } = useSWR("/common/data");
   const [active, setActive] = useState("Projects");
+  const [file, setFile] = useState();
   const { data, isLoading, error, mutate } = useSWR("/projects");
   const navigate = useNavigate();
   const getContent = () => {
@@ -36,7 +38,7 @@ export default function Dashboard() {
             {data?.data?.map((a, i) => (
               <div
                 key={i}
-                className="grid grid-cols-[1fr_auto] rounded-xl border p-4"
+                className="grid grid-cols-[1fr_auto] items-center rounded-xl border p-4"
               >
                 <div>
                   <p className="text-2xl font-medium capitalize">{a.name}</p>
@@ -51,12 +53,20 @@ export default function Dashboard() {
                   {(() => {
                     if (active === "Reports") {
                       return (
-                        <Button
-                          onClick={() => exportToExcel(a)}
-                          className="block h-full rounded-xl bg-[#182AA0] px-12 text-base shadow-lg"
-                        >
-                          Download Reports
-                        </Button>
+                        <div className="space-y-4">
+                          <Button
+                            onClick={() => exportToExcel(a)}
+                            className="block h-full rounded-xl bg-[#182AA0] px-12 text-base shadow-lg"
+                          >
+                            Download Reports
+                          </Button>
+                          <Button
+                            onClick={() => setFile(a)}
+                            className="block h-full w-full rounded-xl bg-[#182AA0] px-12 text-base shadow-lg"
+                          >
+                            Upload Reports
+                          </Button>
+                        </div>
                       );
                     }
                     if (active === "Dashboard") {
@@ -251,6 +261,7 @@ export default function Dashboard() {
           {getContent()}
         </div>
       </div>
+      {file && <AddXlsx open={file} setOpen={setFile} mutate={mutate} />}
     </div>
   );
 }
