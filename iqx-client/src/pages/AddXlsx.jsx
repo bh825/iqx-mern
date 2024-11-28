@@ -102,12 +102,9 @@ export default function AddXlsx({ open, setOpen, mutate }) {
                             <div></div>
                             <div className="col-span-4 rounded-lg bg-green-50 p-3 text-green-800">
                               <span className="text-black/25">Changes IN:</span>{" "}
-                              {[
-                                "marks",
-                                "risk",
-                                "review",
-                                "observation",
-                              ]?.filter((b) => a?.[b] !== stored?.[b])}
+                              {["marks", "risk", "review", "observation"]
+                                ?.filter((b) => a?.[b] !== stored?.[b])
+                                .join(", ")}
                             </div>
                           </div>
                         );

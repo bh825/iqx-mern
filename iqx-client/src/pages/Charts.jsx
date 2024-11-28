@@ -85,7 +85,7 @@ export default function Charts() {
           className="cursor-pointer text-5xl font-bold tracking-wide"
           onClick={() => navigate("/")}
         >
-          IQX
+          IRIS
         </p>
         <p className="text-center text-4xl tracking-wide">{data?.data?.name}</p>
       </div>

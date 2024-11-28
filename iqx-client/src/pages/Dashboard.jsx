@@ -110,7 +110,7 @@ export default function Dashboard() {
   return (
     <div className="grid h-screen w-screen grid-cols-[23%_1fr] grid-rows-[70px_1fr] gap-y-4 bg-[#333333]">
       <div className="row-span-2 grid grid-rows-[auto_1fr_auto] gap-12 bg-[#0D2D9F] px-8 py-4 shadow-md">
-        <p className="text-4xl font-bold tracking-widest text-white">IQX</p>
+        <p className="text-4xl font-bold tracking-widest text-white">IRIS</p>
         <div className="rounded-xl bg-white shadow-[0px_4px_4px_0px_#00000040_inset]">
           <div className="pt-12"></div>
           <div

@@ -41,7 +41,7 @@ export default function ProjectDetails({
           className="cursor-pointer text-5xl font-bold tracking-wide"
           onClick={() => navigate("/")}
         >
-          IQX
+          IRIS
         </p>
         <div></div>
         {[

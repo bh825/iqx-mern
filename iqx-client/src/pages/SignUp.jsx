@@ -29,7 +29,7 @@ export default function SignUp() {
   return (
     <div className="relative flex h-screen w-screen items-center justify-center bg-[linear-gradient(180deg,_#2118A0_0%,_#1B0419_100%)]">
       <p className="absolute left-[5%] top-4 text-4xl font-semibold tracking-widest text-white">
-        IQX
+        IRIS
       </p>
       <div className="w-[min(90%,400px)] rounded-3xl bg-[linear-gradient(180deg,_#8AC4FF_27.67%,_#FFFFFF_100%)] p-8">
         <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-xl bg-white shadow-[0px_4px_4px_0px_#00000040]">
@@ -99,7 +99,7 @@ export default function SignUp() {
               size="large"
               {...register("email")}
               className="h-12 rounded-2xl border-none shadow-[0px_4px_4px_0px_#00000040]"
-              placeholder="Email (e.g. user@iqx.com)"
+              placeholder="Email (e.g. user@iris.com)"
             />
             <p className="pt-1 text-sm text-red-500">
               {errors?.email?.message}
